@@ -36,6 +36,34 @@ const Lantern = ({ className, style }) => (
   </svg>
 )
 
+const STARS = [
+  { x: 16, y: 14, s: 7, d: 0 },
+  { x: 34, y: 8, s: 5, d: 1.4 },
+  { x: 62, y: 17, s: 6, d: 2.6 },
+  { x: 81, y: 9, s: 8, d: 0.7 },
+  { x: 91, y: 26, s: 5, d: 3.3 },
+  { x: 46, y: 30, s: 4, d: 2.0 },
+]
+
+const Stars = () => (
+  <div className="backdrop__stars">
+    {STARS.map((st) => (
+      <span
+        key={`${st.x}-${st.y}`}
+        className="backdrop__star"
+        style={{
+          left: `${st.x}%`,
+          top: `${st.y}%`,
+          fontSize: `${st.s}px`,
+          animationDelay: `${st.d}s`,
+        }}
+      >
+        ✦
+      </span>
+    ))}
+  </div>
+)
+
 const Arch = () => (
   <svg className="backdrop__arch" viewBox="0 0 400 220" fill="none" preserveAspectRatio="xMidYMax meet">
     <path
@@ -74,6 +102,8 @@ export default function Backdrop({ pointer = { x: 0, y: 0 } }) {
         style={{ marginTop: `${y * 0.12}px` }} />
       <Lantern className="backdrop__lantern backdrop__lantern--d"
         style={{ marginTop: `${y * 0.19}px` }} />
+
+      <Stars />
 
       <div className="backdrop__archwrap" style={{ transform: `translate3d(0, ${y * 0.03}px, 0)` }}>
         <Arch />

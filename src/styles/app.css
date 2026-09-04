@@ -275,25 +275,123 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .backdrop__archwrap { position: absolute; left: -6%; right: -6%; bottom: -2%; opacity: 0.55; }
 .backdrop__arch { width: 100%; height: clamp(120px, 22vh, 230px); display: block; }
 
-/* --- falling petals ------------------------------------------------------- */
-.petals { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+/* --- twinkling stars ------------------------------------------------------ */
+.backdrop__stars { position: absolute; inset: 0; }
+.backdrop__star {
+  position: absolute;
+  color: var(--gold);
+  line-height: 1;
+  opacity: 0;
+  animation: star 5.5s ease-in-out infinite;
+}
+@keyframes star {
+  0%, 100% { opacity: 0;    transform: scale(0.5) rotate(0deg); }
+  45%      { opacity: 0.85; transform: scale(1) rotate(90deg); }
+  60%      { opacity: 0.35; transform: scale(0.9) rotate(120deg); }
+}
+
+/* ============================================================================
+ *  FALLING LEAVES, BLOSSOMS AND SPRIGS
+ *  Three nested elements so fall, sway and spin each own their own transform
+ *  and never overwrite one another.
+ * ========================================================================== */
+.petals {
+  position: fixed;
+  inset: -6% 0 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  transition: transform 1.4s cubic-bezier(0.16, 0.8, 0.3, 1);  /* pointer "wind" */
+}
+
 .petal {
   position: absolute;
-  top: -6%;
-  border-radius: 60% 20% 60% 20%;
-  opacity: 0;
+  top: -14vh;
   animation-name: fall;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+  will-change: transform;
 }
-.petal--gold { background: var(--gold-light); }
-.petal--sage { background: var(--sage); }
+.petal__sway {
+  display: block;
+  width: 100%; height: 100%;
+  animation-name: sway;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+.petal__spin {
+  display: block;
+  width: 100%; height: 100%;
+  animation-name: spin;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.petal svg { display: block; width: 100%; height: 100%; }
+
+/* the far layer sits back: smaller, softer, slightly out of focus */
+.petal--far { filter: blur(1.1px); opacity: 0.5; }
+
+.petal--sage    { color: rgba(107, 124, 92, 0.5); }
+.petal--olive   { color: rgba(138, 148, 106, 0.45); }
+.petal--gold    { color: rgba(201, 168, 76, 0.5); }
+.petal--blossom { color: rgba(253, 246, 235, 0.92); }
+.petal--cream   { color: rgba(245, 233, 214, 0.9); }
 
 @keyframes fall {
-  0%   { opacity: 0;    transform: translate3d(0, 0, 0) rotate(0deg); }
-  8%   { opacity: 0.42; }
-  92%  { opacity: 0.24; }
-  100% { opacity: 0;    transform: translate3d(calc(var(--drift) * 70px), 108vh, 0) rotate(560deg); }
+  0%   { opacity: 0; transform: translate3d(0, 0, 0); }
+  7%   { opacity: 1; }
+  90%  { opacity: 0.85; }
+  100% { opacity: 0; transform: translate3d(var(--dx), 120vh, 0); }
+}
+@keyframes sway {
+  from { transform: translateX(calc(var(--sway) * -1)); }
+  to   { transform: translateX(var(--sway)); }
+}
+@keyframes spin {
+  to { transform: rotate(var(--spin)); }
+}
+
+/* ============================================================================
+ *  RISING SPARKS
+ * ========================================================================== */
+.sparks {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.spark {
+  position: absolute;
+  bottom: -4vh;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-light), rgba(232, 201, 106, 0) 70%);
+  opacity: 0;
+  animation-name: rise-mote;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+/* a few are four-point glints rather than round motes */
+.spark--star {
+  background: none;
+  filter: drop-shadow(0 0 2px rgba(232, 201, 106, 0.8));
+}
+.spark--star::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(var(--gold-light), var(--gold-light)) center / 1px 100% no-repeat,
+    linear-gradient(var(--gold-light), var(--gold-light)) center / 100% 1px no-repeat;
+}
+
+@keyframes rise-mote {
+  0%   { opacity: 0;    transform: translate3d(0, 0, 0) scale(0.6); }
+  12%  { opacity: 0.75; }
+  70%  { opacity: 0.5; }
+  100% { opacity: 0;    transform: translate3d(var(--dx), -108vh, 0) scale(1.1); }
 }
 
 /* ============================================================================

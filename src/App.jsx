@@ -4,6 +4,7 @@ import { usePointer } from './hooks/usePointer.js'
 
 import Backdrop from './components/Backdrop.jsx'
 import Petals from './components/Petals.jsx'
+import Sparkles from './components/Sparkles.jsx'
 import ScrollProgress from './components/ScrollProgress.jsx'
 import Loader from './components/Loader.jsx'
 import OpenTransition from './components/OpenTransition.jsx'
@@ -54,7 +55,8 @@ export default function App() {
   return (
     <>
       <Backdrop pointer={pointer} />
-      <Petals />
+      <Petals pointer={pointer} />
+      <Sparkles />
       {opened && <ScrollProgress />}
       <Loader names={words.signature} onDone={handleReady} />
       <OpenTransition active={opening} onReveal={revealInvitation} onDone={finishOpening} />
