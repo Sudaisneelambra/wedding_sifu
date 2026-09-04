@@ -1,0 +1,48 @@
+/* ============================================================================
+ *  THEME  —  merged palette from both reference invitations
+ *  (warm cream ground, rose-clay + antique gold accents, deep cocoa text)
+ * ========================================================================== */
+
+:root {
+  /* grounds */
+  --bg:          #FAF7F1;
+  --bg-2:        #F5EFE0;
+  --card:        #FDFBF7;
+
+  /* accents */
+  --rose:        #A86040;
+  --rose-soft:   rgba(168, 96, 64, 0.08);
+  --brown:       #8B6F47;
+  --brown-deep:  #5C4033;
+  --gold:        #C9A84C;
+  --gold-light:  #E8C96A;
+  --gold-dark:   #8B6A2E;
+  --gold-soft:   rgba(201, 168, 76, 0.10);
+  --sage:        #6B7C5C;
+
+  /* ink */
+  --text:        #2C2016;
+  --text-2:      #3E2C1C;
+  --muted:       #7A6652;
+  --faint:       rgba(44, 32, 22, 0.45);
+
+  /* lines & shadow */
+  --border:      rgba(139, 106, 46, 0.22);
+  --border-soft: rgba(139, 106, 46, 0.12);
+  --shadow-sm:   0 2px 14px rgba(92, 64, 51, 0.06);
+  --shadow-md:   0 10px 40px rgba(92, 64, 51, 0.09);
+  --shadow-lg:   0 24px 70px rgba(92, 64, 51, 0.12);
+
+  /* type */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-script:  'Great Vibes', 'Cormorant Garamond', cursive;
+  --font-arabic:  'Amiri', 'Cormorant Garamond', serif;
+  --font-sans:    'Montserrat', system-ui, -apple-system, sans-serif;
+
+  /* rhythm */
+  --maxw:        720px;
+  --section-y:   clamp(4rem, 11vw, 7.5rem);
+  --radius:      4px;
+  --radius-lg:   10px;
+  --ease:        cubic-bezier(0.22, 0.61, 0.36, 1);
+}
