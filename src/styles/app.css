@@ -1451,3 +1451,244 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .rsvp__btn:active { background: var(--gold-soft); border-color: var(--gold); }
   .detail:active { transform: translateY(-3px); }
 }
+
+/* ============================================================================
+ *  TWO HANDS JOINING
+ *  Driven by scroll position, not a timer — the hands close as the guest
+ *  scrolls the section up the screen and hold once it is centred.
+ * ========================================================================== */
+.hands { overflow: hidden; }
+
+.hands__stage {
+  position: relative;
+  height: clamp(150px, 34vw, 260px);
+  margin: 0 auto;
+  max-width: 620px;
+}
+
+.hands__side {
+  /* full-height flex box so the hand centres itself vertically — no vertical
+     translate to collide with the scroll-driven horizontal one */
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  width: 56%;
+  will-change: transform;
+}
+.hands__side--l { left: -3%;  transform-origin: left center; }
+.hands__side--r { right: -3%; transform-origin: right center; }
+.hands__side > * { width: 100%; }
+
+/* --- real photographs ----------------------------------------------------- */
+.hands__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 30px rgba(92, 64, 51, 0.18));
+}
+/* the right-hand image is used as supplied — mirror it here if you only have
+   one cut-out and want to reuse it on both sides */
+.hands__stage--photo .hands__side--r .hands__photo { transform: none; }
+
+/* --- the gold bands ------------------------------------------------------- */
+.hands__stage--rings .hands__side { width: 34%; }
+/* placed so the two bands genuinely overlap — the band only fills the middle
+   of its box, so the boxes have to sit well inside each other */
+.hands__stage--rings .hands__side--l { left: 26%; }
+.hands__stage--rings .hands__side--r { right: 26%; z-index: 2; }
+
+.band {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  perspective: 700px;
+  filter: drop-shadow(0 16px 20px rgba(92, 64, 51, 0.26));
+  animation: bandFloat 6s ease-in-out infinite alternate;
+}
+.band--r { animation-delay: -3s; }
+
+/* the band lies at an angle and turns slowly, like one held up to the light */
+.band__tilt {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  animation: bandTurn 14s ease-in-out infinite alternate;
+}
+.band--r .band__tilt { animation-delay: -7s; }
+
+.band__metal,
+.band__inlay,
+.band__inner,
+.band__glint {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+/* the metal: warm yellow gold, light running all the way round */
+.band__metal {
+  background: conic-gradient(
+    from 200deg,
+    #8A6A20 0deg,
+    #E4C36A 30deg,
+    #FFF6D8 55deg,
+    #D9B44A 85deg,
+    #7A5A1A 130deg,
+    #5C4412 158deg,
+    #A8842A 195deg,
+    #F2DDA0 225deg,
+    #FFFBEA 246deg,
+    #D2AC44 275deg,
+    #8A6A20 310deg,
+    #63490F 340deg,
+    #8A6A20 360deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 0 52%, #000 52.6% 100%);
+  mask: radial-gradient(circle, transparent 0 52%, #000 52.6% 100%);
+  /* rotating the gradient sends the highlight travelling around the band */
+  animation: glintTravel 9s linear infinite;
+}
+.band--r .band__metal { animation-direction: reverse; animation-duration: 11s; }
+
+/* the white-gold wave, clipped to the band so it reads as an inlay */
+.band__inlay {
+  overflow: hidden;
+  -webkit-mask: radial-gradient(circle, transparent 0 52%, #000 52.6% 100%);
+  mask: radial-gradient(circle, transparent 0 52%, #000 52.6% 100%);
+  opacity: 1;
+}
+.band__inlay svg { width: 100%; height: 100%; display: block; }
+
+/* the brilliant */
+.band__stone {
+  /* the band runs between roughly 37% and 50% of the box radius, so the stone
+     is placed on that ring rather than in the empty middle */
+  position: absolute;
+  top: 2.5%;
+  left: 50%;
+  translate: -50% 0;
+  width: 7.5%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #FFFFFF, #EAF1F6 45%, #B9C4CC 78%, #FFFFFF);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.9), 0 1px 3px rgba(92, 64, 51, 0.4);
+}
+.band__stone-fire {
+  position: absolute;
+  inset: -70%;
+  background:
+    linear-gradient(#FFFFFF, #FFFFFF) center / 100% 1.2px no-repeat,
+    linear-gradient(#FFFFFF, #FFFFFF) center / 1.2px 100% no-repeat;
+  opacity: 0.85;
+  animation: stoneFire 3.4s ease-in-out infinite;
+}
+@keyframes stoneFire {
+  0%, 100% { opacity: 0.25; transform: rotate(0deg) scale(0.7); }
+  50%      { opacity: 0.95; transform: rotate(45deg) scale(1); }
+}
+
+/* the inside wall — dark at the top, warm bounced light at the bottom.
+   This is what stops the band reading as a flat printed circle. */
+.band__inner {
+  background: linear-gradient(
+    180deg,
+    rgba(48, 34, 8, 0.85) 0%,
+    rgba(88, 64, 18, 0.45) 34%,
+    rgba(214, 172, 80, 0.35) 68%,
+    rgba(255, 233, 168, 0.6) 100%
+  );
+  -webkit-mask: radial-gradient(circle, transparent 0 52%, #000 52.6% 67%, transparent 69%);
+  mask: radial-gradient(circle, transparent 0 52%, #000 52.6% 67%, transparent 69%);
+}
+
+/* two hot spots where the light actually catches */
+.band__glint {
+  background:
+    radial-gradient(closest-side at 30% 18%, rgba(255, 253, 240, 0.95), rgba(255, 253, 240, 0) 62%),
+    radial-gradient(closest-side at 74% 78%, rgba(255, 248, 216, 0.7), rgba(255, 248, 216, 0) 60%);
+  -webkit-mask: radial-gradient(circle, transparent 0 52%, #000 52.6% 100%);
+  mask: radial-gradient(circle, transparent 0 52%, #000 52.6% 100%);
+  mix-blend-mode: screen;
+}
+
+@keyframes glintTravel {
+  to { transform: rotate(360deg); }
+}
+@keyframes bandTurn {
+  from { transform: rotateX(12deg) rotateY(-15deg) rotateZ(-7deg); }
+  to   { transform: rotateX(-6deg) rotateY(16deg) rotateZ(6deg); }
+}
+@keyframes bandFloat {
+  from { translate: 0 -3%; }
+  to   { translate: 0 3%; }
+}
+
+/* --- the moment they meet ------------------------------------------------- */
+.hands__glow,
+.hands__ring,
+.hands__spark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+}
+
+.hands__glow {
+  width: clamp(120px, 26vw, 200px);
+  height: clamp(120px, 26vw, 200px);
+  margin: calc(clamp(120px, 26vw, 200px) / -2) 0 0 calc(clamp(120px, 26vw, 200px) / -2);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 201, 106, 0.4), rgba(232, 201, 106, 0) 58%);
+  /* scale only — `breathe` also animates opacity, which would override the
+     scroll-driven fade and light the glow before the hands ever meet */
+  animation: glowBreathe 4.5s ease-in-out infinite;
+}
+@keyframes glowBreathe {
+  0%, 100% { transform: scale(0.94); }
+  50%      { transform: scale(1.06); }
+}
+
+.hands__ring {
+  width: 74px; height: 74px;
+  margin: -37px 0 0 -37px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  /* only pulses once the hands have actually met */
+  /* invisible until `met` raises its opacity, so it only reads once they touch */
+  animation: ring 2.8s var(--ease) infinite;
+}
+
+.hands__spark {
+  width: 5px; height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--gold-light);
+  transform-origin: center;
+  transition: transform 0.7s var(--ease), opacity 0.5s var(--ease);
+}
+
+/* --- the verse ------------------------------------------------------------ */
+.hands__words {
+  margin-top: clamp(1.6rem, 5vw, 2.4rem);
+  transition: opacity 0.5s var(--ease);
+}
+.hands__arabic { font-size: clamp(1.15rem, 4.4vw, 1.6rem); }
+.hands__line {
+  margin-top: 0.6rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1rem, 3.4vw, 1.2rem);
+  color: var(--muted);
+}
+.hands__ref { margin-top: 0.9rem; color: var(--faint); }
+
+@media (max-width: 560px) {
+  .hands__stage { height: clamp(130px, 40vw, 200px); }
+  .hands__side { width: 62%; }
+  .hands__stage--rings .hands__side { width: 40%; }
+  .hands__stage--rings .hands__side--l { left: 20%; }
+  .hands__stage--rings .hands__side--r { right: 20%; }
+}

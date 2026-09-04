@@ -10,6 +10,7 @@ import Loader from './components/Loader.jsx'
 import OpenTransition from './components/OpenTransition.jsx'
 import Hero from './components/Hero.jsx'
 import InviteCard from './components/InviteCard.jsx'
+import HandsJoin from './components/HandsJoin.jsx'
 import EventDetails from './components/EventDetails.jsx'
 import Countdown from './components/Countdown.jsx'
 import Rsvp from './components/Rsvp.jsx'
@@ -71,6 +72,7 @@ export default function App() {
               art={art}
               pointer={pointer}
             />
+            <HandsJoin words={words} art={art} />
             <EventDetails event={event} venue={venue} />
             <Countdown dateTime={event.dateTime} caption={words.countdownCaption} />
             <Rsvp rsvp={rsvp} />

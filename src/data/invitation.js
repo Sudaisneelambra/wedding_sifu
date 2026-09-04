@@ -35,6 +35,9 @@ export const invitation = {
     connector: '&',
     openCta: 'Open Invitation',
     countdownCaption: 'Every moment brings us closer',
+    unionArabic: 'وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً',
+    unionLine: 'And He placed between you affection and mercy',
+    unionRef: 'Sūrah Ar-Rūm · 30:21',
     duaArabic: 'بَارَكَ اللهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ',
     duaTranslit:
       'May Allah bless you both, and unite you together in goodness.',
@@ -83,6 +86,14 @@ export const invitation = {
     // how the artwork is framed at each size (CSS object-position)
     focusWide: '22% 50%',
     focusNarrow: '26% 60%',
+
+    /* The two images that meet in the middle when the guest scrolls past the
+     * invitation. Use cut-out PNGs with a transparent background — a bride's
+     * hand reaching in from the left, a groom's from the right, each roughly
+     * 1200px wide. Drop them in /public and point here. Leave both empty and
+     * two interlocking gold bands are shown instead. */
+    handLeft: '',
+    handRight: '',
   },
 
   music: {
