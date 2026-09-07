@@ -29,13 +29,20 @@ export default function App() {
   /* Two states, never both: the cover screen, or the invitation. */
   const [opened, setOpened] = useState(false)
   const [opening, setOpening] = useState(false)
+  /* The rest of the page mounts once the transition is over. Building all six
+   * sections in the same frame as the reveal is a heavy synchronous render,
+   * and on a slow phone it stalls the door animation. */
+  const [full, setFull] = useState(false)
 
   const pointer = usePointer()
 
   const handleReady = useCallback(() => setReady(true), [])
   const startOpening = useCallback(() => setOpening(true), [])
   const revealInvitation = useCallback(() => setOpened(true), [])
-  const finishOpening = useCallback(() => setOpening(false), [])
+  const finishOpening = useCallback(() => {
+    setOpening(false)
+    setFull(true)
+  }, [])
 
   // the invitation always begins at its own first screen
   useLayoutEffect(() => {
@@ -72,12 +79,16 @@ export default function App() {
               art={art}
               pointer={pointer}
             />
-            <HandsJoin words={words} art={art} />
-            <EventDetails event={event} venue={venue} />
-            <Countdown dateTime={event.dateTime} caption={words.countdownCaption} />
-            <Rsvp rsvp={rsvp} />
-            <Venue venue={venue} event={event} />
-            <Closing words={words} />
+            {full && (
+              <>
+                <HandsJoin words={words} art={art} />
+                <EventDetails event={event} venue={venue} />
+                <Countdown dateTime={event.dateTime} caption={words.countdownCaption} />
+                <Rsvp rsvp={rsvp} />
+                <Venue venue={venue} event={event} />
+                <Closing words={words} />
+              </>
+            )}
           </>
         ) : (
           <Hero

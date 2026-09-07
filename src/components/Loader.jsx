@@ -26,6 +26,14 @@ export default function Loader({ names, minMs = 1700, maxMs = 4500, onDone }) {
 
     const fallback = setTimeout(finish, maxMs)
 
+    /* Same guard as the opening curtain: a backgrounded tab can have its
+     * timers suspended, and the guest would return to a splash that never
+     * lifts. */
+    const catchUp = () => {
+      if (document.visibilityState === 'visible' && Date.now() - started >= minMs) finish()
+    }
+    document.addEventListener('visibilitychange', catchUp)
+
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(finish).catch(finish)
     } else {
@@ -35,6 +43,7 @@ export default function Loader({ names, minMs = 1700, maxMs = 4500, onDone }) {
     return () => {
       cancelled = true
       clearTimeout(fallback)
+      document.removeEventListener('visibilitychange', catchUp)
     }
   }, [minMs, maxMs, onDone])
 

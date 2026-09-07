@@ -1104,6 +1104,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   touch-action: none;
   overscroll-behavior: none;
   perspective: 1400px;
+  /* Failsafe. The overlay is normally unmounted by React after 2.3s, but if a
+     timer is throttled (background tab) or a render stalls on a slow phone,
+     this guarantees the curtain lifts and never leaves the page unopenable. */
+  animation: curtainFailsafe 4.6s forwards;
+}
+@keyframes curtainFailsafe {
+  0%, 88%  { opacity: 1; pointer-events: auto; }
+  100%     { opacity: 0; pointer-events: none; visibility: hidden; }
 }
 
 /* --- the two panels ------------------------------------------------------- */
@@ -1611,7 +1619,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     radial-gradient(closest-side at 74% 78%, rgba(255, 248, 216, 0.7), rgba(255, 248, 216, 0) 60%);
   -webkit-mask: radial-gradient(circle, transparent 0 52%, #000 52.6% 100%);
   mask: radial-gradient(circle, transparent 0 52%, #000 52.6% 100%);
-  mix-blend-mode: screen;
+  opacity: 0.85;
 }
 
 @keyframes glintTravel {
@@ -1692,4 +1700,45 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hands__stage--rings .hands__side { width: 48%; }
   .hands__stage--rings .hands__side--l { left: 14%; }
   .hands__stage--rings .hands__side--r { right: 14%; }
+}
+
+/* ============================================================================
+ *  VENUE QR
+ * ========================================================================== */
+.venue__qr { margin-top: 1.8rem; }
+
+.venue__qr-frame {
+  display: inline-block;
+  padding: 0.7rem;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+}
+.venue__qr-frame:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+.venue__qr-frame img {
+  display: block;
+  width: clamp(120px, 34vw, 160px);
+  height: auto;
+  /* a QR must stay hard-edged at any size or phones struggle to read it */
+  image-rendering: pixelated;
+}
+
+.venue__qr-cap {
+  margin-top: 0.7rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+@media (max-width: 560px) {
+  .venue__qr-cap { font-size: 0.66rem; letter-spacing: 0.16em; }
+}
+
+/* if anyone prints the invitation, the code must still scan */
+@media print {
+  .venue__qr-frame { border-color: #000; box-shadow: none; }
 }

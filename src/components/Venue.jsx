@@ -21,6 +21,15 @@ export default function Venue({ venue, event }) {
           <a className="venue__map" href={venue.mapsUrl} target="_blank" rel="noopener noreferrer">
             <span aria-hidden="true">➤</span> Open Google Maps
           </a>
+
+          {venue.qr && (
+            <div className="venue__qr">
+              <span className="venue__qr-frame">
+                <img src={venue.qr} alt={`QR code with directions to ${venue.name}`} />
+              </span>
+              <p className="venue__qr-cap">{venue.qrCaption || 'Scan for directions'}</p>
+            </div>
+          )}
         </Reveal>
       </div>
     </section>

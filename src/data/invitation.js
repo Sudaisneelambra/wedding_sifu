@@ -59,7 +59,10 @@ export const invitation = {
   venue: {
     name: 'Keyath Garden',
     address: 'Mariyad, Manjeri',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Keyath+Garden+Mariyad+Manjeri',
+    // the exact pin — the button and the QR code both point here
+    mapsUrl: 'https://maps.app.goo.gl/d1N5U21RnQA5TQSr6',
+    qr: '/venue-qr.svg',
+    qrCaption: 'Scan for directions',
   },
 
   rsvp: {

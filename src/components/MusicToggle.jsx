@@ -78,7 +78,9 @@ export default function MusicToggle({ music, start }) {
 
   return (
     <>
-      <audio ref={audioRef} src={music.src} loop preload="auto" />
+      {/* `none`: the track is half a megabyte and must not compete with
+          the first paint. It is fetched on the gesture that starts it. */}
+      <audio ref={audioRef} src={music.src} loop preload="none" />
       <button
         className={`music ${playing ? 'is-playing' : 'is-paused'}`}
         onClick={toggle}

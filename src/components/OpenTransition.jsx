@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 /**
  * The "opening the invitation" moment.
@@ -11,9 +11,12 @@ import { useEffect, useState } from 'react'
  */
 export default function OpenTransition({ active, onReveal, onDone }) {
   const [phase, setPhase] = useState('closing')
+  const startedAt = useRef(0)
 
   useEffect(() => {
     if (!active) return undefined
+
+    startedAt.current = performance.now()
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       onReveal()
@@ -32,9 +35,26 @@ export default function OpenTransition({ active, onReveal, onDone }) {
     // curtain is gone
     const t2 = setTimeout(onDone, 2300)
 
+    /* Browsers throttle — and in-app browsers such as WhatsApp's or
+     * Instagram's often suspend — timers in a backgrounded tab. Without this,
+     * a guest who taps Open and switches away can come back to a page still
+     * sitting behind the closed curtain. On return we catch the sequence up to
+     * where it should be. Both callbacks are idempotent. */
+    const catchUp = () => {
+      if (document.visibilityState !== 'visible') return
+      const elapsed = performance.now() - startedAt.current
+      if (elapsed >= 900) {
+        onReveal()
+        setPhase('opening')
+      }
+      if (elapsed >= 2300) onDone()
+    }
+    document.addEventListener('visibilitychange', catchUp)
+
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
+      document.removeEventListener('visibilitychange', catchUp)
     }
   }, [active, onReveal, onDone])
 
