@@ -1686,9 +1686,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hands__ref { margin-top: 0.9rem; color: var(--faint); }
 
 @media (max-width: 560px) {
-  .hands__stage { height: clamp(130px, 40vw, 200px); }
+  /* the phone is the main screen this is opened on, so the rings get room */
+  .hands__stage { height: clamp(170px, 50vw, 230px); }
   .hands__side { width: 62%; }
-  .hands__stage--rings .hands__side { width: 40%; }
-  .hands__stage--rings .hands__side--l { left: 20%; }
-  .hands__stage--rings .hands__side--r { right: 20%; }
+  .hands__stage--rings .hands__side { width: 48%; }
+  .hands__stage--rings .hands__side--l { left: 14%; }
+  .hands__stage--rings .hands__side--r { right: 14%; }
 }

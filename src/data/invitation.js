@@ -4,7 +4,7 @@
 
 export const invitation = {
   meta: {
-    pageTitle: 'Jishna & Anshif — Wedding Invitation',
+    pageTitle: 'Anshif & Jishna — Wedding Invitation',
     description: 'Request the pleasure of your company at our Nikkah.',
   },
 
@@ -12,7 +12,7 @@ export const invitation = {
    * `order` decides who is shown first. Swap to ['groom', 'bride'] any time.
    * -------------------------------------------------------------------- */
   couple: {
-    order: ['bride', 'groom'],
+    order: ['groom', 'bride'],
     bride: {
       name: 'Jishna Siddique Ali',
       shortName: 'Jishna',
@@ -43,7 +43,7 @@ export const invitation = {
       'May Allah bless you both, and unite you together in goodness.',
     closing:
       'Your presence and prayers on this blessed day would mean the world to us. Jazakumullahu Khairan.',
-    signature: 'Jishna & Anshif',
+    signature: 'Anshif & Jishna',
   },
 
   event: {

@@ -36,11 +36,17 @@ export function useSectionProgress(ref, reach = 0.72) {
 
     window.addEventListener('scroll', update, { passive: true })
     window.addEventListener('resize', update)
+    window.addEventListener('orientationchange', update)
+    // belt and braces on phones: `scroll` can be throttled during momentum
+    // scrolling, and `touchmove` keeps the animation tracking the finger
+    window.addEventListener('touchmove', update, { passive: true })
     update()
 
     return () => {
       window.removeEventListener('scroll', update)
       window.removeEventListener('resize', update)
+      window.removeEventListener('orientationchange', update)
+      window.removeEventListener('touchmove', update)
       if (frame) cancelAnimationFrame(frame)
     }
   }, [ref, reach])
