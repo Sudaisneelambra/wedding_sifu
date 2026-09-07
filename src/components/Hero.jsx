@@ -3,7 +3,7 @@ import Reveal from './Reveal.jsx'
 import Rule from './Rule.jsx'
 
 /** The opening screen. It is replaced by the invitation once opened. */
-export default function Hero({ first, second, words, art, pointer, onOpen }) {
+export default function Hero({ first, second, words, art, event, venue, pointer, onOpen }) {
   const { x, y } = pointer
 
   return (
@@ -47,6 +47,35 @@ export default function Hero({ first, second, words, art, pointer, onOpen }) {
               <span className="hero__scroll-icon" aria-hidden="true">✉</span>
               {words.openCta}
             </button>
+          </Reveal>
+          {/* The essentials, right on the cover — so a guest who never taps
+              through, or whose browser struggles, still has the date, the
+              venue and a scannable route to it. */}
+          <Reveal className="hero__facts" delay={900}>
+            <Rule />
+
+            <div className="hero__facts-row">
+              <div className="hero__facts-text">
+                <p className="hero__date">
+                  {event.weekday}, {event.dayNumber} {event.monthLabel} {event.yearLabel}
+                </p>
+                <p className="hero__time">{event.title} · {event.timeLabel}</p>
+                <p className="hero__venue">{venue.name}</p>
+                <p className="hero__addr">{venue.address}</p>
+              </div>
+
+              {venue.qr && (
+                <a
+                  className="hero__qr"
+                  href={venue.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src={venue.qr} alt={`QR code with directions to ${venue.name}`} />
+                  <span className="hero__qr-cap">{venue.qrCaption || 'Scan for directions'}</span>
+                </a>
+              )}
+            </div>
           </Reveal>
         </div>
       </div>

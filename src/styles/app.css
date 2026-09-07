@@ -41,8 +41,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .app { position: relative; z-index: 1; }
 
 /* Before the invitation is opened the cover screen is the whole document —
-   nothing else is mounted, so there is nothing to scroll. */
-.app.is-sealed { height: 100svh; }
+   nothing else is mounted, so there is nothing to scroll. `min-height` rather
+   than `height`: when the details make the card taller than the screen (small
+   phones, landscape) they must be reachable rather than clipped. */
+.app.is-sealed { min-height: 100svh; }
 
 .section { position: relative; padding: var(--section-y) clamp(1.25rem, 5vw, 2rem); }
 .section--alt { background: linear-gradient(180deg, transparent, var(--gold-soft), transparent); }
@@ -526,7 +528,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero__card {
   position: relative;
   width: 100%;
-  padding: clamp(2.6rem, 8vw, 4.2rem) clamp(1.4rem, 6vw, 3rem);
+  padding: clamp(1.9rem, 5.5vw, 3.2rem) clamp(1.3rem, 5vw, 2.6rem);
   background: rgba(253, 251, 247, 0.74);
   backdrop-filter: blur(7px);
   border: 1px solid var(--border-soft);
@@ -561,9 +563,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero__names {
   /* the script face has tall swashes and deep descenders — it needs room */
   font-family: var(--font-script);
-  font-size: clamp(2.5rem, 10.5vw, 4.1rem);
+  font-size: clamp(2.2rem, 9vw, 3.5rem);
   font-weight: 400;
-  line-height: 1.32;
+  line-height: 1.3;
   color: var(--brown-deep);
   overflow: visible;
   overflow-wrap: anywhere;
@@ -595,11 +597,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 
 .hero__scroll {
-  margin-top: 2.4rem;
+  margin-top: 1.7rem;
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.9rem 2.1rem;
+  padding: 0.85rem 1.9rem;
   border: 1px solid var(--border);
   border-radius: 999px;
   font-size: 0.63rem;
@@ -1741,4 +1743,127 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* if anyone prints the invitation, the code must still scan */
 @media print {
   .venue__qr-frame { border-color: #000; box-shadow: none; }
+}
+
+/* ============================================================================
+ *  COVER ESSENTIALS
+ *  Date, venue and the QR, shown on the opening screen so a guest who never
+ *  taps through still has everything they need.
+ * ========================================================================== */
+.hero__facts { margin-top: 1.5rem; }
+
+.hero__facts-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.9rem, 4vw, 1.6rem);
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.hero__facts-text { min-width: 0; }
+
+.hero__date {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 3.6vw, 1.2rem);
+  color: var(--brown-deep);
+  letter-spacing: 0.01em;
+}
+.hero__time {
+  margin-top: 0.1rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+.hero__venue {
+  margin-top: 0.55rem;
+  font-family: var(--font-display);
+  font-size: clamp(0.98rem, 3.4vw, 1.15rem);
+  color: var(--brown-deep);
+}
+.hero__addr {
+  margin-top: 0.1rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+/* the code is a link too — tapping it opens the same pin */
+.hero__qr {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease);
+}
+.hero__qr:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+
+.hero__qr img {
+  display: block;
+  width: clamp(76px, 21vw, 96px);
+  height: auto;
+  image-rendering: pixelated;
+}
+.hero__qr-cap {
+  font-size: 0.5rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* stacked and centred when there is no room for two columns */
+@media (max-width: 400px) {
+  .hero__facts-row { flex-direction: column; text-align: center; gap: 0.9rem; }
+}
+
+/* landscape phones: the cover is short, so keep the details but shrink them */
+@media (max-height: 560px) and (orientation: landscape) {
+  .hero__facts { margin-top: 1rem; }
+  .hero__qr img { width: 66px; }
+  .hero__date { font-size: 0.95rem; }
+}
+
+/* ============================================================================
+ *  COMPACT COVER
+ *  The cover now carries the date, venue and QR, and those are only useful if
+ *  they are on screen without scrolling. On anything shorter than a tall
+ *  desktop window everything tightens so the whole card fits one view.
+ * ========================================================================== */
+@media (max-height: 900px) {
+  .hero { padding: 1rem 0.9rem; }
+  .hero__cardwrap { width: min(100%, 520px); }
+  .hero__card { padding: 1.5rem 1.2rem; }
+
+  .hero__bismillah { font-size: clamp(0.95rem, 3.4vw, 1.15rem); line-height: 1.75; }
+
+  .rule { margin: 0.85rem auto; }
+
+  .hero__names { font-size: clamp(1.85rem, 7.4vw, 2.7rem); line-height: 1.24; padding: 0; }
+  .hero__name { line-height: 1.2; }
+  .shimmer { padding: 0.1em 0.08em 0.16em; }
+  .hero__amp { font-size: 0.38em; line-height: 1.3; }
+
+  .hero__sub { margin-top: 0.65rem; letter-spacing: 0.26em; }
+  .hero__scroll { margin-top: 1rem; padding: 0.78rem 1.6rem; }
+
+  .hero__facts { margin-top: 0.9rem; }
+  .hero__facts-row { gap: 0.85rem; }
+  .hero__date { font-size: 1rem; }
+  .hero__time { font-size: 0.64rem; }
+  .hero__venue { margin-top: 0.35rem; font-size: 0.98rem; }
+  .hero__addr { font-size: 0.72rem; }
+  .hero__qr { padding: 0.35rem; }
+  .hero__qr img { width: 68px; }
+  .hero__qr-cap { font-size: 0.46rem; }
+}
+
+/* very short screens: the greeting line is the one thing the card can lose */
+@media (max-height: 640px) {
+  .hero__sub { display: none; }
+  .hero__names { font-size: clamp(1.65rem, 6.6vw, 2.2rem); }
+  .hero__qr img { width: 62px; }
 }

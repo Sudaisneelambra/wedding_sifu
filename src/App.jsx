@@ -96,6 +96,8 @@ export default function App() {
             second={second}
             words={words}
             art={art}
+            event={event}
+            venue={venue}
             pointer={pointer}
             onOpen={startOpening}
           />
